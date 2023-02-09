@@ -12,6 +12,7 @@ void main() {
       routes: {
         '/': (context) => MyApp(),
         'nxtPage': (context) => nxtPage(),
+        'googlemap': (context) => googleMap(),
       },
     ),
   );
@@ -138,7 +139,10 @@ class _nxtPageState extends State<nxtPage> {
                     children: [
                       Spacer(),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'googlemap',
+                              arguments: e);
+                        },
                         child: Text(
                           'Location',
                           style: TextStyle(
@@ -202,6 +206,40 @@ class _nxtPageState extends State<nxtPage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class googleMap extends StatefulWidget {
+  const googleMap({Key? key}) : super(key: key);
+
+  @override
+  State<googleMap> createState() => _googleMapState();
+}
+
+class _googleMapState extends State<googleMap> {
+  @override
+  Widget build(BuildContext context) {
+    Map e = ModalRoute.of(context)!.settings.arguments as Map;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          e['comapany'],
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: GoogleMap(
+          initialCameraPosition: CameraPosition(
+            target: LatLng(
+              e['latitude'],
+              e['longitude'],
+            ),
+          ),
+          compassEnabled: true,
         ),
       ),
     );
